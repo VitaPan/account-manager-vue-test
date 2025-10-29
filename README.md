@@ -1,48 +1,65 @@
-# account-manager-vue-test
+Account Manager Vue Test
+Описание проекта
+Vue.js 3 приложение для управления учетными записями с использованием современного стека технологий. Проект реализует форму управления учетными записями с валидацией, уведомлениями и сохранением данных в облачной базе данных.
 
-This template should help get you started developing with Vue 3 in Vite.
+🚀 Технологический стек
+Vue.js 3 + Composition API
 
-## Recommended IDE Setup
+TypeScript - строгая типизация
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+Pinia - управление состоянием
 
-## Recommended Browser Setup
+Naive UI - компоненты пользовательского интерфейса
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+Tailwind CSS - стилизация
 
-## Type Support for `.vue` Imports in TS
+Appwrite - облачная база данных и бэкенд
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+📋 Функциональность
+Управление учетными записями
+✅ Добавление новых учетных записей
 
-## Customize configuration
+✅ Редактирование существующих записей
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+✅ Удаление учетных записей
 
-## Project Setup
+✅ Валидация данных в реальном времени
 
-```sh
-npm install
-```
+✅ Автосохранение при изменении полей
 
-### Compile and Hot-Reload for Development
+Поля учетной записи
+Метка - необязательное поле, максимум 50 символов
 
-```sh
-npm run dev
-```
+Формат: текстовые метки через знак ;
 
-### Type-Check, Compile and Minify for Production
+Преобразуется в массив объектов {text: "метка"}
 
-```sh
-npm run build
-```
+Тип записи - обязательный выбор:
 
-### Lint with [ESLint](https://eslint.org/)
+LDAP - скрывает поле пароля
 
-```sh
-npm run lint
-```
+Локальная - показывает поле пароля
+
+Логин - обязательное поле, максимум 100 символов
+
+Пароль - обязателен только для локальных записей, максимум 100 символов
+
+Валидация
+Проверка обязательных полей
+
+Ограничение длины строк
+
+Визуальная индикация ошибок
+
+Уведомления об успешных операциях и ошибках
+
+🎨 Интерфейс
+Темная тема с градиентными акцентами
+
+Адаптивный дизайн
+
+Интуитивная навигация
+
+Система уведомлений в реальном времени
+
+Подсветка полей при ошибках валидации
