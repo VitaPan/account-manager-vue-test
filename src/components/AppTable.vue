@@ -220,7 +220,7 @@ onMounted(() => {
                                 <div class="max-w-xs">
                                     <p class="text-gray-600 text-sm">
                                         Удалить учетную запись
-                                        <span class="font-medium">"{{ account.login }}"</span>?
+                                        <span class="font-medium">{{ account.login }}</span>?
                                     </p>
                                 </div>
                             </n-popconfirm>
