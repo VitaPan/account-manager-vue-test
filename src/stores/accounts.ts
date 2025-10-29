@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { Client, Databases, ID } from 'appwrite'
 import type { IAccount, ILabelObject } from '@/types/account'
+import { useLoadingStore } from './loading'
 
 const client = new Client()
 client
@@ -15,10 +16,11 @@ const databases = new Databases(client)
 
 export const useAccountsStore = defineStore('accounts', () => {
   const accounts = ref<IAccount[]>([])
-  const loading = ref(false)
+  const loadingStore = useLoadingStore()
 
   const loadAccounts = async () => {
     try {
+      loadingStore.start()
       const response = await databases.listDocuments(DATABASE_ID, COLLECTION_ID)
 
       accounts.value = response.documents.map(doc => {
@@ -50,6 +52,8 @@ export const useAccountsStore = defineStore('accounts', () => {
       })
     } catch (error) {
       console.error('Ошибка загрузки:', error)
+    } finally {
+      loadingStore.stop()
     }
   }
 
@@ -68,6 +72,7 @@ export const useAccountsStore = defineStore('accounts', () => {
 
   const saveAccount = async (account: IAccount) => {
     try {
+      loadingStore.start()
       const labelsObjects = account.label
         ? account.label.split(';')
           .map(label => label.trim())
@@ -104,11 +109,14 @@ export const useAccountsStore = defineStore('accounts', () => {
 
     } catch (error: unknown) {
       throw error
+    } finally {
+      loadingStore.stop()
     }
   }
 
   const deleteAccount = async (id: string) => {
     try {
+      loadingStore.start()
       const account = accounts.value.find(acc => acc.id === id)
       if (account && !account.isNew) {
         await databases.deleteDocument(DATABASE_ID, COLLECTION_ID, id)
@@ -116,12 +124,13 @@ export const useAccountsStore = defineStore('accounts', () => {
       accounts.value = accounts.value.filter(account => account.id !== id)
     } catch (error) {
       throw error
+    } finally {
+      loadingStore.stop()
     }
   }
 
   return {
     accounts,
-    loading,
     loadAccounts,
     addAccount,
     saveAccount,

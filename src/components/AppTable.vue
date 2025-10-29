@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useAccountsStore } from '@/stores/accounts'
+import { useLoadingStore } from '@/stores/loading'
 import type { IAccount } from '@/types/account'
 import { TrashOutline as TrashIcon, AddOutline as AddIcon } from '@vicons/ionicons5'
 import { NPopconfirm } from 'naive-ui'
+import { FingerprintSpinner } from 'epic-spinners'
 
 const accountsStore = useAccountsStore()
+const loadingStore = useLoadingStore()
 const notification = ref<{ type: 'success' | 'error', message: string } | null>(null)
 
 const showNotification = (type: 'success' | 'error', message: string) => {
@@ -86,7 +89,7 @@ onMounted(() => {
     <n-config-provider>
         <div class="min-h-screen bg-gray-900 text-white">
             <div v-if="notification" :class="[
-                'fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg border-l-4 max-w-sm transition-all duration-300',
+                'fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm transition-all duration-500',
                 notification.type === 'success'
                     ? 'bg-green-900 border-green-400 text-green-100'
                     : 'bg-red-900 border-red-400 text-red-100'
@@ -94,7 +97,7 @@ onMounted(() => {
                 <div class="flex items-center">
                     <div :class="[
                         'w-6 h-6 rounded-full flex items-center justify-center mr-3',
-                        notification.type === 'success' ? 'bg-green-400' : 'bg-red-400'
+                        notification.type === 'success' ? 'bg-green-800' : 'bg-red-400'
                     ]">
                         <span class="text-sm font-bold">
                             {{ notification.type === 'success' ? '✓' : '!' }}
@@ -103,8 +106,14 @@ onMounted(() => {
                     <p class="text-sm font-medium">{{ notification.message }}</p>
                 </div>
             </div>
-
-            <div class="mx-auto p-6">
+            <div v-if="loadingStore.isLoading"
+                class="fixed inset-0 bg-gray-900/80 backdrop-blur-sm z-40 flex items-center justify-center">
+                <div class="text-center">
+                    <fingerprint-spinner :animation-duration="1500" :size="70" color="#10b981" class="mx-auto mb-4" />
+                    <p class="text-gray-300 text-lg font-medium">Загрузка...</p>
+                </div>
+            </div>
+            <div class="mx-auto p-6 " :class="{ 'opacity-50 pointer-events-none': loadingStore.isLoading }">
                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6">
                     <div class="mb-3">
                         <h1
@@ -130,7 +139,8 @@ onMounted(() => {
                     </p>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 pt-7">
+                <div v-if="!loadingStore.isLoading && accountsStore.accounts.length > 0"
+                    class="grid grid-cols-1 lg:grid-cols-2 gap-3 pt-7">
                     <div v-for="account in accountsStore.accounts" :key="account.id"
                         class="bg-gray-800 rounded-xl p-6 border border-gray-700">
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -187,7 +197,7 @@ onMounted(() => {
                                     :class="account.errors.password ? 'text-red-400' : 'text-gray-500'">
                                     {{ account.password?.length || 0 }}/100 символов
                                     <span v-if="account.errors.password" class="ml-2">• {{ account.errors.password
-                                    }}</span>
+                                        }}</span>
                                 </p>
                             </div>
 
@@ -230,7 +240,7 @@ onMounted(() => {
                     </div>
                 </div>
 
-                <div v-if="accountsStore.accounts.length === 0 && !accountsStore.loading" class="text-center py-12">
+                <div v-if="!loadingStore.isLoading && accountsStore.accounts.length === 0" class="text-center py-12">
                     <div class="text-gray-400">
                         <n-icon @click="addAccount" size="64"
                             class="mx-auto mb-4 opacity-50 hover:text-emerald-400 cursor-pointer">
