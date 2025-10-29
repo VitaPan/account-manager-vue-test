@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { Client, Databases, ID } from 'appwrite'
-import type { IAccount } from '@/types/account'
+import type { IAccount, ILabelObject } from '@/types/account'
 
 const client = new Client()
 client
@@ -17,41 +17,41 @@ export const useAccountsStore = defineStore('accounts', () => {
   const accounts = ref<IAccount[]>([])
   const loading = ref(false)
 
-const loadAccounts = async () => {
-  try {
-    const response = await databases.listDocuments(DATABASE_ID, COLLECTION_ID)
-    
-    accounts.value = response.documents.map(doc => {
-      let label = ''
-      
-      if (doc.labels) {
-        try {
-          const labelsArray = JSON.parse(doc.labels)
-          label = labelsArray
-            .map((item: any) => item.text || '')
-            .filter(text => text.length > 0)
-            .join('; ')
-        } catch {
+  const loadAccounts = async () => {
+    try {
+      const response = await databases.listDocuments(DATABASE_ID, COLLECTION_ID)
+
+      accounts.value = response.documents.map(doc => {
+        let label = ''
+
+        if (doc.labels) {
+          try {
+            const labelsArray = JSON.parse(doc.labels)
+            label = labelsArray
+              .map((item: ILabelObject) => item.text || '')
+              .filter((text: string) => text.length > 0)
+              .join('; ')
+          } catch {
+            label = doc.label || ''
+          }
+        } else {
           label = doc.label || ''
         }
-      } else {
-        label = doc.label || ''
-      }
-      
-      return {
-        id: doc.$id,
-        label: label,
-        type: doc.type,
-        login: doc.login,
-        password: doc.password || null,
-        errors: {},
-        isNew: false
-      }
-    })
-  } catch (error) {
-    console.error('Ошибка загрузки:', error)
+
+        return {
+          id: doc.$id,
+          label: label,
+          type: doc.type,
+          login: doc.login,
+          password: doc.password || null,
+          errors: {},
+          isNew: false
+        }
+      })
+    } catch (error) {
+      console.error('Ошибка загрузки:', error)
+    }
   }
-}
 
   const addAccount = () => {
     const newAccount: IAccount = {
@@ -66,22 +66,22 @@ const loadAccounts = async () => {
     accounts.value.push(newAccount)
   }
 
-const saveAccount = async (account: IAccount) => {
-  try {
-    const labelsObjects = account.label
-      ? account.label.split(';')
+  const saveAccount = async (account: IAccount) => {
+    try {
+      const labelsObjects = account.label
+        ? account.label.split(';')
           .map(label => label.trim())
           .filter(label => label.length > 0)
           .map(text => ({ text }))
-      : []
+        : []
 
-    const accountData = {
-      type: account.type,
-      login: account.login,
-      label: account.label || '',
-      labels: JSON.stringify(labelsObjects),
-      password: account.type === 'Локальная' ? account.password || '' : null
-    }
+      const accountData = {
+        type: account.type,
+        login: account.login,
+        label: account.label || '',
+        labels: JSON.stringify(labelsObjects),
+        password: account.type === 'Локальная' ? account.password || '' : null
+      }
 
       if (account.isNew) {
         const response = await databases.createDocument(
@@ -90,7 +90,7 @@ const saveAccount = async (account: IAccount) => {
           ID.unique(),
           accountData
         )
-        
+
         account.id = response.$id
         account.isNew = false
       } else {
@@ -101,8 +101,8 @@ const saveAccount = async (account: IAccount) => {
           accountData
         )
       }
-      
-    } catch (error: any) {
+
+    } catch (error: unknown) {
       throw error
     }
   }

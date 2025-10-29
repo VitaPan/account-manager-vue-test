@@ -22,3 +22,7 @@ export interface IAccountFormData {
   label: string
   labels: { text: string }[] 
 }
+
+export interface ILabelObject {
+  text: string
+}
