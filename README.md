@@ -1,48 +1,46 @@
-# account-manager-vue-test
+# 🚀 Account Manager
+## Описание проекта
+Vue.js 3 приложение для управления учетными записями с использованием современного стека технологий. Проект реализует форму управления учетными записями с валидацией, уведомлениями и сохранением данных на сервере.
+<div align="center">
 
-This template should help get you started developing with Vue 3 in Vite.
+![Vue.js](https://img.shields.io/badge/Vue.js-3-4FC08D?logo=vuedotjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?logo=typescript&logoColor=white)
+![Appwrite](https://img.shields.io/badge/Appwrite-1.0-F02E65?logo=appwrite&logoColor=white)
+![Tailwind](https://img.shields.io/badge/Tailwind-3.0-06B6D4?logo=tailwindcss&logoColor=white)
 
-## Recommended IDE Setup
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+[Демо](https://account-manager-vue-test.vercel.app)
 
-## Recommended Browser Setup
+</div>
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+## 🚀 Технологический стек
 
-## Type Support for `.vue` Imports in TS
+#### Vue.js 3 + Composition API
+#### TypeScript
+#### Pinia - управление состоянием
+#### Naive UI - компоненты пользовательского интерфейса
+#### Tailwind CSS - стилизация
+#### Appwrite - база данных и бэкенд
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+## ✨ Возможности
 
-## Customize configuration
+### 🎯 Основной функционал
+| Функция | Статус | Описание |
+|---------|--------|----------|
+| ✅ | **Создание учетных записей** | LDAP и локальные пользователи |
+| ✅ | **Умная валидация** | В реальном времени с подсветкой |
+| ✅ | **Автосохранение** | При потере фокуса |
+| ✅ | **Система уведомлений** | Toast-уведомления |
+| ✅ | **Адаптивный дизайн** | Mobile-first подход |
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+## 🏗️ Архитектура
+### Структура проекта
+| Папка/Файл | Тип | Описание |
+|------------|-----|----------|
+| `src/components/` | 📁 | Vue компоненты |
+| `src/stores/accounts.ts` | 📄 | Pinia store |
+| `src/types/account.ts` | 📄 | TypeScript типы |
+| `src/assets/` | 📁 | Стили |
+| `src/main.ts` | 📄 | Точка входа Vue |
+| `src/App.vue` | 📄 | Корневой компонент |
 
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
