@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue'
 import { useAccountsStore } from '@/stores/accounts'
 import type { IAccount } from '@/types/account'
 import { TrashOutline as TrashIcon, AddOutline as AddIcon } from '@vicons/ionicons5'
+import { NPopconfirm } from 'naive-ui'
 
 const accountsStore = useAccountsStore()
 const notification = ref<{ type: 'success' | 'error', message: string } | null>(null)
@@ -24,7 +25,7 @@ const deleteAccount = async (id: string) => {
         await accountsStore.deleteAccount(id)
         showNotification('success', 'Учетная запись удалена')
     } catch {
-        showNotification('error', 'Ошибка при удалении записи')
+        showNotification('error', 'Ошибка при удалении учетной записи')
     }
 }
 
@@ -192,16 +193,27 @@ onMounted(() => {
 
                             <div v-else></div>
                         </div>
-
                         <div class="flex justify-end mt-6 pt-4 border-t border-gray-700">
-                            <n-button @click="deleteAccount(account.id)" strong secondary type="error" size="medium">
-                                <template #icon>
-                                    <n-icon>
-                                        <TrashIcon />
-                                    </n-icon>
+                            <n-popconfirm :positive-text="'Удалить'" :negative-text="'Отмена'"
+                                @positive-click="deleteAccount(account.id)" placement="top-end">
+                                <template #trigger>
+                                    <n-button strong secondary type="error" size="medium"
+                                        class="hover:scale-105 transition-transform">
+                                        <template #icon>
+                                            <n-icon>
+                                                <TrashIcon />
+                                            </n-icon>
+                                        </template>
+                                        Удалить
+                                    </n-button>
                                 </template>
-                                Удалить
-                            </n-button>
+                                <div class="max-w-xs">
+                                    <p class="text-gray-600 text-sm">
+                                        Удалить учетную запись
+                                        <span class="font-medium">"{{ account.login }}"</span>?
+                                    </p>
+                                </div>
+                            </n-popconfirm>
                         </div>
 
                         <div v-if="hasErrors(account)"
